@@ -1,0 +1,51 @@
+.MODEL SMALL
+.STACK 100H
+.DATA
+		PROMPT1 DB 10,13,"Enter a lowercase letter: $"
+		PROMPT2 DB 10,13,"Wrong. Enter again: $"
+		PROMPT3 DB 10,13,"The uppercase equivalent is $"
+.CODE
+MAIN PROC
+		MOV AX,@DATA
+		MOV DS,AX
+		
+		MOV DX,OFFSET PROMPT1
+		MOV AH,09
+		INT 21H
+		
+		MOV AH,01
+		INT 21H
+		
+		CMP AL,'a'
+		JB AGAIN
+		CMP AL,'z'
+		JA AGAIN
+		JMP REMAIN
+AGAIN:
+		MOV DX,OFFSET PROMPT2
+		MOV AH,09
+		INT 21H
+		
+		MOV AH,01
+		INT 21H
+		
+		CMP AL,'a'
+		JB AGAIN
+		CMP AL,'z'
+		JA AGAIN
+		JMP REMAIN
+
+REMAIN:
+		MOV DX,OFFSET PROMPT3
+		MOV AH,09
+		INT 21H
+		
+		MOV AH,02
+		MOV DL, AL
+		XOR DL,20H
+		INT 21H
+		
+		MOV AH,4CH
+		INT 21H
+MAIN ENDP
+END MAIN
